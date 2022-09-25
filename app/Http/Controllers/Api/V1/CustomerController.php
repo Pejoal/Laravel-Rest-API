@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Customer;
-use App\Http\Requests\StoreCustomerRequest;
-use App\Http\Requests\UpdateCustomerRequest;
+use Illuminate\Http\Request;
+use App\Services\V1\CustomerQuery;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Resources\V1\CustomerResource;
+use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Resources\V1\CustomerCollection;
 
 class CustomerController extends Controller
@@ -16,10 +18,21 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         // return new CustomerCollection(Customer::all());
-        return new CustomerCollection(Customer::paginate());
+
+        // http://127.0.0.1:8000/api/v1/customers?postalCode[gt]=30000
+        // http://127.0.0.1:8000/api/v1/customers?state[eq]=Nevada
+        // http://127.0.0.1:8000/api/v1/customers?postalCode[gt]=30000&type[eq]=I
+        $filter = new CustomerQuery();
+        $queryItems = $filter->transform($request); // [['coloum', 'operator', 'value']]
+        Customer::where($queryItems);
+        if (count($queryItems) == 0) {
+            return new CustomerCollection(Customer::paginate());
+        }
+        // return new CustomerCollection(Customer::paginate());
+        return new CustomerCollection(Customer::where($queryItems)->paginate());
     }
 
     /**
