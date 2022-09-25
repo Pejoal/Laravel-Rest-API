@@ -5,3 +5,27 @@ php artisan make:resource V1\CustomerResource
 php artisan make:resource V1\CustomerCollection
 php artisan make:resource V1\InvoiceResource
 php artisan make:resource V1\InvoiceCollection
+
+Content-Type: application/json
+Accept: application/json
+POST Request [http://127.0.0.1:8000/api/v1/customers]
+{
+  "name": "Lynch, Mraz and Ullrich",
+  "type": "B",
+  "email": "email@e.com",
+  "address": "2667 Rex Causeway Apt. 851",
+  "city": "Langmouth",
+  "state": "Oklahoma",
+  "postalCode": "70023-1110"
+}
+
+PUT & PATHC Request [http://127.0.0.1:8000/api/v1/customers/87] (Patch can be used to Update single value)
+{
+  "name": "Lynch, Mraz and Ullrich",
+  "type": "B",
+  "email": "email@e.com",
+  "address": "2667 Rex Causeway Apt. 851",
+  "city": "Langmouth",
+  "state": "Oklahoma",
+  "postalCode": "70023-1110"
+}
