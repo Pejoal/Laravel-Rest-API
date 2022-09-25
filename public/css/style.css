@@ -1,0 +1,116 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background-color: #333;
+  color: #fff;
+}
+
+h1 {
+  margin: 1rem 0;
+}
+
+h2,
+h3 {
+  margin: 0.5rem 0;
+}
+
+a {
+  color: #ccc;
+  transition: 0.2s all ease-in;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #fff;
+}
+
+.edit,
+.delete {
+  display: block;
+  margin: 0.5rem auto;
+  background-color: #32f;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+  width: 70%;
+  transition: 0.2s font-size ease-in;
+}
+
+.edit:hover,
+.delete:hover {
+  text-decoration: none;
+  font-size: 1.7rem;
+}
+
+.delete {
+  background-color: #f14;
+}
+
+p {
+  line-height: 1.4;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+li {
+  margin-left: 0.4rem;
+  transition: 0.2s ease-in margin-left;
+  padding: 0.5rem;
+}
+
+li:hover {
+  margin-left: 1.2rem;
+}
+
+li::before {
+  content: ">> ";
+  margin-right: 0.4rem;
+}
+
+input {
+  width: 70%;
+  margin: 0.4rem auto;
+}
+
+button[type="submit"] {
+  cursor: pointer;
+  width: 40%;
+  margin: 0.4rem auto;
+  background-color: crimson;
+  color: #ddd;
+  font-size: 1.2rem;
+  transition: 250ms ease-in;
+  transition-property: font-size, color;
+  border: none;
+}
+
+button[type="submit"]:hover {
+  font-size: 1.4rem;
+  color: #fff;
+}
+
+input:focus {
+  outline: 0;
+}
+
+input,
+button {
+  display: block;
+  padding: 0.4rem 0.8rem;
+}
+
+output {
+  color: #f14;
+  padding-left: 1rem;
+}
