@@ -26,7 +26,7 @@ class InvoiceController extends Controller
         // http://127.0.0.1:8000/api/v1/invoices?status[ne]=P // no equal
         $filter = new InvoicesFilter();
         $queryItems = $filter->transform($request); // [['coloum', 'operator', 'value']]
-        Invoice::where($queryItems);
+        
         if (count($queryItems) == 0) {
             return new InvoiceCollection(Invoice::paginate());
         }

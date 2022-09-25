@@ -22,21 +22,28 @@ class CustomerController extends Controller
     {
         // return new CustomerCollection(Customer::all());
 
+        // http://127.0.0.1:8000/api/v1/customers?postalCode[gt]=30000&includeInvoices=true
         // http://127.0.0.1:8000/api/v1/customers?page=2
         // http://127.0.0.1:8000/api/v1/customers?postalCode[gt]=30000
         // http://127.0.0.1:8000/api/v1/customers?state[eq]=Nevada
         // http://127.0.0.1:8000/api/v1/customers?postalCode[gt]=30000&type[eq]=I
         $filter = new CustomerFilter();
-        $queryItems = $filter->transform($request); // [['coloum', 'operator', 'value']]
-        Customer::where($queryItems);
-        if (count($queryItems) == 0) {
-            return new CustomerCollection(Customer::paginate());
-        }
-        // return new CustomerCollection(Customer::paginate());
-        // return new CustomerCollection(Customer::where($queryItems)->paginate());
+        $filterItems = $filter->transform($request); // [['coloum', 'operator', 'value']]
 
-        $customers = Customer::where($queryItems)->paginate();
-        return new CustomerCollection($customers->appends($request->query()));
+        $includeInvoices = $request->query('includeInvoices');
+
+        $customers = Customer::where($filterItems);
+        if ($includeInvoices) {
+            $customers = $customers->with('invoices');
+        }
+        return new CustomerCollection($customers->paginate()->appends($request->query()));
+
+        // if (count($filterItems) == 0) {
+        //     return new CustomerCollection(Customer::paginate());
+        // }
+        // return new CustomerCollection(Customer::paginate());
+        // return new CustomerCollection(Customer::where($filterItems)->paginate());
+
     }
 
     /**
@@ -67,6 +74,12 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
+
+        $includeInvoices = request()->query('includeInvoices');
+
+        if ($includeInvoices) {
+            return new CustomerResource($customer->loadMissing('invoices'));
+        }
         return new CustomerResource($customer);
     }
 
