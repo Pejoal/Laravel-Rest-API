@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use App\Services\V1\CustomerQuery;
+use App\Filters\V1\CustomerFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Resources\V1\CustomerResource;
@@ -22,17 +22,21 @@ class CustomerController extends Controller
     {
         // return new CustomerCollection(Customer::all());
 
+        // http://127.0.0.1:8000/api/v1/customers?page=2
         // http://127.0.0.1:8000/api/v1/customers?postalCode[gt]=30000
         // http://127.0.0.1:8000/api/v1/customers?state[eq]=Nevada
         // http://127.0.0.1:8000/api/v1/customers?postalCode[gt]=30000&type[eq]=I
-        $filter = new CustomerQuery();
+        $filter = new CustomerFilter();
         $queryItems = $filter->transform($request); // [['coloum', 'operator', 'value']]
         Customer::where($queryItems);
         if (count($queryItems) == 0) {
             return new CustomerCollection(Customer::paginate());
         }
         // return new CustomerCollection(Customer::paginate());
-        return new CustomerCollection(Customer::where($queryItems)->paginate());
+        // return new CustomerCollection(Customer::where($queryItems)->paginate());
+
+        $customers = Customer::where($queryItems)->paginate();
+        return new CustomerCollection($customers->appends($request->query()));
     }
 
     /**
