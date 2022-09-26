@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Invoice;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Filters\V1\InvoicesFilter;
 use App\Http\Controllers\Controller;
@@ -10,6 +11,7 @@ use App\Http\Requests\StoreInvoiceRequest;
 use App\Http\Resources\V1\InvoiceResource;
 use App\Http\Requests\UpdateInvoiceRequest;
 use App\Http\Resources\V1\InvoiceCollection;
+use App\Http\Requests\V1\BulkStoreInvoiceRequest;
 
 
 class InvoiceController extends Controller
@@ -26,7 +28,7 @@ class InvoiceController extends Controller
         // http://127.0.0.1:8000/api/v1/invoices?status[ne]=P // no equal
         $filter = new InvoicesFilter();
         $queryItems = $filter->transform($request); // [['coloum', 'operator', 'value']]
-        
+
         if (count($queryItems) == 0) {
             return new InvoiceCollection(Invoice::paginate());
         }
@@ -35,16 +37,6 @@ class InvoiceController extends Controller
 
         $invoices = Invoice::where($queryItems)->paginate();
         return new InvoiceCollection($invoices->appends($request->query()));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -58,6 +50,16 @@ class InvoiceController extends Controller
         //
     }
 
+    public function bulkStore(BulkStoreInvoiceRequest $request)
+    {
+        $bulk = collect($request->all())->map(function ($arr, $key) {
+            return Arr::except($arr, ['customerId', 'billedDate', 'paidDate']);
+        });
+        Invoice::insert($bulk->toArray());
+        $return = ['message' => 'All Data Added Successfully'];
+        return json_encode($return);
+    }
+
     /**
      * Display the specified resource.
      *
@@ -69,16 +71,6 @@ class InvoiceController extends Controller
         return new InvoiceResource($invoice);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Invoice $invoice)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

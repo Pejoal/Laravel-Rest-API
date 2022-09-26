@@ -55,6 +55,8 @@ class CustomerController extends Controller
     public function store(StoreCustomerRequest $request)
     {
         return new CustomerResource(Customer::create($request->all()));
+        // $return = ['message' => 'Customer Added Successfully'];
+        // return json_encode($return);
     }
 
     /**
@@ -66,7 +68,6 @@ class CustomerController extends Controller
     public function show(Customer $customer)
     {
         $includeInvoices = request()->query('includeInvoices');
-
         if ($includeInvoices) {
             return new CustomerResource($customer->loadMissing('invoices'));
         }
@@ -83,6 +84,8 @@ class CustomerController extends Controller
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
         $customer->update($request->all());
+        $return = ['message' => 'Customer Updated Successfully'];
+        return json_encode($return);
     }
 
     /**
@@ -93,6 +96,8 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        $customer->delete();
+        $return = ['message' => 'Customer Deleted Successfully'];
+        return json_encode($return);
     }
 }
