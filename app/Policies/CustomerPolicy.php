@@ -65,7 +65,6 @@ class CustomerPolicy
      */
     public function delete(User $user, Customer $customer)
     {
-        //
     }
 
     /**

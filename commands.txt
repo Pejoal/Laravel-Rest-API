@@ -8,6 +8,9 @@ php artisan make:resource V1\InvoiceCollection
 
 Content-Type: application/json
 Accept: application/json
+
+GET Request [http://127.0.0.1:8000/api/v1/customers]
+
 POST Request [http://127.0.0.1:8000/api/v1/customers]
 {
   "name": "Lynch, Mraz and Ullrich",
@@ -50,3 +53,14 @@ Bulk(POST) Request [http://127.0.0.1:8000/api/v1/Invoices]
   "status": "B"
   }
 ]
+
+Create Token [http://127.0.0.1:8000/setup]
+{
+  "admin": "4|4f4bQQQYbvZJ2nuQfnu7LM0cOMnD8FZalRuu0jM8",
+  "update": "5|ui16ZZf4Lonk5G5eFcl4YRa6P9LMg8K1G7dEsuF8",
+  "basic": "6|Wd2o2YHUKCiIPfPHbuc2Gca2PqO9ixt2hqxJtwgH"
+}
+
+
+GET Request [http://127.0.0.1:8000/api/v1/customers]
+Bearer Token
